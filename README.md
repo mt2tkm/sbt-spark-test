@@ -1,1 +1,1 @@
-# sbt-spark-test
+# sbtsparktest
