@@ -16,22 +16,34 @@ object test {
     println("================================================")
 
     log.info("loading data")
-
+    /*
     val DataLines = getIrisDataLines(sc)
     println(DataLines.count())
     println(DataLines)
+    */
+
+    val b = sc.textFile("./src/main/resources/b.csv")
+
+    val ma = scala.collection.mutable.HashMap.empty[String,Int]
+
+    for(data<-b.map(_.split(","))){
+        ma(data(1)) = data(0).toInt
+        println(ma)
+    }
+    println("forの外")
+    println(ma)
 
 
-    val b = sc.textFile("a.csv")
-    println(b.count())
-    println(b)
+
+
+
 
     log.info("finished")
     println("================================================")
   }
   private def getIrisDataLines(sc: SparkContext): RDD[String] = {
       val irisDataContents = Source.fromURL(
-      getClass.getResource("/a.csv"))
+      getClass.getResource("/b.csv"))
       .getLines.takeWhile(_ != "").toSeq
       sc.parallelize(irisDataContents)
   }
