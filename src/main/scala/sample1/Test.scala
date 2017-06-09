@@ -20,23 +20,59 @@ object test {
     val sc = new SparkContext(conf)
 
     //SQLContext インスタンスの生成
+    val sqlContext = new SQLContext(sc)
+    import sqlContext.implicits._
 
     println("================================================")
-    log.info("loading data")
-    //val Data = sc.textFile("./src/main/resources/sample.csv").map(_.split(","))
-    val Data =  getData(sc).map(_.split(","))
-    for(i<-Data){for(j<-i){println(j)}}
-    print(Data)
 
+    //データを読み込み、データフレーム化
+    val DataRDD =  getData(sc)
+    val testDF = DataRDD.toDF
+
+    //仮想的なviewの作成
+    testDF.registerTempTable("test")
+    val sql = "select _4,_5,_6,_7,_8,_13,_14,_15,_18,_19,_20,_21,_22,sum(_10),sum(_11),sum(_12) from test group by _4,_5,_6,_7,_8,_13,_14,_15,_18,_19,_20,_21,_22"
+    val test_view = sqlContext.sql(sql)
+
+    println(test_view.show)
+    println(test_view)
 
     log.info("finished")
     println("================================================")
   }
-  private def getData(sc: SparkContext): RDD[String] = {
-      val DataContents = Source.fromURL(
-      getClass.getResource("/sample.csv"))
-      .getLines.takeWhile(_ != "").toSeq
-      sc.parallelize(DataContents)
-  }
+
+  //brand,bigcate,smallcateがうまくいかない
+  private def getData(sc:SparkContext): RDD[(Int,Int,Int,Int,Int,Int,Int,Int,String,Int,Int,Int,Int,Int,String,String,String,String,String,String,String,Int)] =
+      sc.textFile("./src/main/resources/sample.csv").map{lines=>
+          val elms = lines.split(",")
+
+          val id = elms(0).toInt
+          val orderid = elms(1).toInt
+          val orderdetail = elms(2).toInt
+          val item = elms(3).toInt
+          val itemdetail = elms(4).toInt
+          val aFLG = elms(5).toInt
+          val bFLG = elms(6).toInt
+          val device = elms(7).toInt
+          val date = elms(8)
+          val addFee = elms(9).toInt
+          val fee = elms(10).toInt
+          val num = elms(11).toInt
+          val cFLG = elms(12).toInt
+          val sex = elms(13).toInt
+          val age = elms(14)
+          val register = elms(15)
+          val withdrawal = elms(16)
+          val region = elms(17)
+          val color = elms(18)
+          val colorcate = elms(19)
+          val size = elms(20)
+          val bigcate = elms(21)
+          val smallcate = elms(22)
+          val shop = elms(23).toInt
+          val brand = elms(24)
+
+          (id, orderid, orderdetail, item, itemdetail, aFLG, bFLG, device, date, addFee, fee, num, cFLG, sex, age, register, withdrawal, region, color, colorcate, size, shop)
+      }
 
 }
