@@ -17,3 +17,5 @@ project/plugins/project/
 .worksheet
 
 .idea/
+src/main/resources/sample.csv
+a/

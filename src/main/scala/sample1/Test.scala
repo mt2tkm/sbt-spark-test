@@ -5,46 +5,38 @@ import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 
+import org.apache.spark.sql._
+
 import org.slf4j.LoggerFactory
 import scala.io.Source
 
 object test {
   def main(args: Array[String]) {
+    //ログ出力用
     val log = LoggerFactory.getLogger(getClass)
+
+    //SparkContext インスタンスの生成
     val conf = new SparkConf().setAppName("Test").setMaster("local[*]")
     val sc = new SparkContext(conf)
+
+    //SQLContext インスタンスの生成
+
     println("================================================")
-
     log.info("loading data")
-    /*
-    val DataLines = getIrisDataLines(sc)
-    println(DataLines.count())
-    println(DataLines)
-    */
-
-    val b = sc.textFile("./src/main/resources/b.csv")
-
-    val ma = scala.collection.mutable.HashMap.empty[String,Int]
-
-    for(data<-b.map(_.split(","))){
-        ma(data(1)) = data(0).toInt
-        println(ma)
-    }
-    println("forの外")
-    println(ma)
-
-
-
-
+    //val Data = sc.textFile("./src/main/resources/sample.csv").map(_.split(","))
+    val Data =  getData(sc).map(_.split(","))
+    for(i<-Data){for(j<-i){println(j)}}
+    print(Data)
 
 
     log.info("finished")
     println("================================================")
   }
-  private def getIrisDataLines(sc: SparkContext): RDD[String] = {
-      val irisDataContents = Source.fromURL(
-      getClass.getResource("/b.csv"))
+  private def getData(sc: SparkContext): RDD[String] = {
+      val DataContents = Source.fromURL(
+      getClass.getResource("/sample.csv"))
       .getLines.takeWhile(_ != "").toSeq
-      sc.parallelize(irisDataContents)
+      sc.parallelize(DataContents)
   }
+
 }
