@@ -34,8 +34,8 @@ object test {
     val sql = "select _4,_5,_6,_7,_8,_13,_14,_15,_18,_19,_20,_21,_22,sum(_10),sum(_11),sum(_12) from test group by _4,_5,_6,_7,_8,_13,_14,_15,_18,_19,_20,_21,_22"
     val test_view = sqlContext.sql(sql)
 
-    println(test_view.show)
-    println(test_view)
+    //クエリ結果の作成
+
 
     log.info("finished")
     println("================================================")
