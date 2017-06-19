@@ -19,3 +19,4 @@ metastore_db/
 
 .idea/
 src/main/resources/sample.csv
+src/main/resources/all_compe.csv
