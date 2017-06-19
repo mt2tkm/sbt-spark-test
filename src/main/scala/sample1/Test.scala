@@ -50,11 +50,10 @@ object test {
       val map_a = scala.collection.mutable.HashMap.empty[String, scala.collection.mutable.HashMap[String,(Int,Int,Int)]]
       val map_b = scala.collection.mutable.HashMap.empty[String, scala.collection.mutable.HashMap[String,(Int,Int,Int)]]
       val col = df.columns
-
+      //条件設定
       val A = (7,"大阪府")
       val B = (7,"神奈川県")
 
-      //df.filter("region = '大阪府'").show
       df.rdd.filter{row => row(A._1).toString == A._2 || row(B._1).toString == B._2}
       .toLocalIterator.foreach{line =>
           val addfee = line(12).toString.toInt
@@ -107,7 +106,6 @@ object test {
           println(i)
           println(map_b(i))
       }
-
   }
 
   //Search subset of data
